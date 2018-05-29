@@ -36,16 +36,9 @@ void loop() {
     // Calculate moisture in the plant
     int moistureValue = analogRead(moisturePin);
 
-    // DEBUG: Print its value via serial port
-    Serial.print("Soil Moisture: ");
-    Serial.println(moistureValue);
-
-    // Turn on pump if moisture is greater than 500
-    if(moistureValue > 500)
-      digitalWrite(relayPin, HIGH);
-    else
-      digitalWrite(relayPin, LOW);
-
+    // Watering the plant
+    WateringPlant(moistureValue);
+    
     // turn sensor OFF again
     digitalWrite(power, LOW);
     
@@ -66,3 +59,21 @@ void loop() {
   }
 }
 
+void WateringPlant(int moistureValue) {
+  // Watering plant if moisture valus is greater than 500
+  while(moistureValue > 500) {
+    // continue when relay is still ON
+    if(relayPin == HIGH)
+      continue;
+
+    // DEBUG: Print its value via serial port
+    Serial.print("Soil Moisture: ");
+    Serial.println(moistureValue);
+    
+    // turn ON relay
+    digitalWrite(relayPin, HIGH);
+  }
+  
+  // turn OFF relay
+  digitalWrite(relayPin, LOW);
+}
